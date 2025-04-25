@@ -7,12 +7,12 @@
 #V_Y = 0.3
 #V_Z = 0
 
-#dt = 0.2        ; processing time (image captured --> controller knows --> control signal received)
+#delay = 0.2        ; processing time (image captured --> controller knows --> control signal received)
 
 ; real-time position
-#ref_x = #O0_X + #V_X * #dt
-#ref_y = #O0_Y + #V_Y * #dt
-#ref_z = #O0_Z + #V_Z * #dt
+#ref_x = #O0_X + #V_X * #delay
+#ref_y = #O0_Y + #V_Y * #delay
+#ref_z = #O0_Z + #V_Z * #delay
 
 #ref_vx = #V_X
 #ref_vy = #V_Y
