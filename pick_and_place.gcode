@@ -27,6 +27,35 @@ M98 P900    ; correct the reference
 
 
 
+; Step 2: Move towards reference
+; tracking error
+#e_x = #ref_x - #X
+#e_y = #ref_y - #Y
+#e_z = #ref_z - #Z
+
+; Kp: coefficient of proportional control
+#Kp = 1.0
+
+; reference velocity
+#v_ref_x = #ref_vx
+#v_ref_y = #ref_vy
+#v_ref_z = #ref_vz
+
+; PD control --> velocity command
+#v_cmd_x = #v_ref_x + #Kp * #e_x
+#v_cmd_y = #v_ref_y + #Kp * #e_y
+#v_cmd_z = #v_ref_z + #Kp * #e_z
+
+; sampling time
+#dt_control = 0.05
+
+; velocity command --> position command
+#x_target = #X + #v_cmd_x * #dt_control
+#y_target = #Y + #v_cmd_y * #dt_control
+#z_target = #Z + #v_cmd_z * #dt_control
+
+; give the position command
+G01 X[#x_target] Y[#y_target] Z[#z_target] F300
 
 
 
