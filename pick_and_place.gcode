@@ -33,6 +33,8 @@ M98 P900    ; correct the reference
 #e_y = #ref_y - #Y
 #e_z = #ref_z - #Z
 
+M98 P910     ; check_tracking_successful()
+
 ; Kp: coefficient of proportional control
 #Kp = 1.0
 
@@ -81,4 +83,19 @@ O900
 #ref_x = #ref_x + #offset_x
 #ref_y = #ref_y + #offset_y
 #ref_z = #ref_z + #offset_z
+M99
+
+
+;================================================
+; O910: check_tracking_successful()
+;================================================
+O910
+#position_threshold = 1.5
+#dx = #abs[#e_x]
+#dy = #abs[#e_y]
+#dz = #abs[#e_z]
+
+#tracking_successful = 0
+
+IF [[#dx LT #position_threshold] AND [#dy LT #position_threshold] AND [#dz LT #position_threshold]] THEN #tracking_successful = 1
 M99
