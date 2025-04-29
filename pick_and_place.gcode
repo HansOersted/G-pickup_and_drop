@@ -55,7 +55,10 @@ M98 P900    ; correct the reference
 #z_target = #Z + #v_cmd_z * #dt_control
 
 ; give the position command
-G01 X[#x_target] Y[#y_target] Z[#z_target] F300
+#v_cmd_coefficient = 1.0        ; no less than 1.0
+#v_cmd_mag = #v_cmd_coefficient * #sqrt[#v_cmd_x * #v_cmd_x + #v_cmd_y * #v_cmd_y + #v_cmd_z * #v_cmd_z]
+G01 F[#v_cmd_mag]
+G01 X[#x_target] Y[#y_target] Z[#z_target]
 
 
 
