@@ -67,7 +67,7 @@ N200
 ; Step 3: Activate suction
 M03 D10            ; start sucking, assume D10 is the suction command
 G04 P0.5           ; Establish suction for 0.5s
-M07 I1             ; check if the suction is successful, assume I1 is the sensor signal
+M07 I1             ; check if the suction is successful, assume I1 is the sensor signal, use #I1 to check the suction status
 
 
 
