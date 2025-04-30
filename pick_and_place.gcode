@@ -63,7 +63,11 @@ G01 F[#v_cmd_mag]
 G01 X[#x_target] Y[#y_target] Z[#z_target]
 
 
-
+N200
+; Step 3: Activate suction
+M03 D10            ; start sucking, assume D10 is the suction command
+G04 P0.5           ; Establish suction for 0.5s
+M07 I1             ; check if the suction is successful, assume I1 is the sensor signal
 
 
 
