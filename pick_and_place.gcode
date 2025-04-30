@@ -6,6 +6,8 @@
 #offset_y = 0
 #offset_z = -20
 
+#reference_offset_corrected = 0
+#drop_offset_corrected = 0
 
 IF [#task_begin == 0] THEN
     M98 P901          ; move to top
@@ -17,6 +19,8 @@ ENDIF
 #O0_X = 100      ; past real-time position (simulated input)
 #O0_Y = -50
 #O0_Z = -520
+
+#reference_corrected = 0 ; set #reference_corrected = 0 after reading the reference position
 
 #V_X = -0.1        ; past real-time velocity (simulated input)
 #V_Y = 0.3
@@ -31,7 +35,9 @@ ENDIF
 #ref_vx = #V_X
 #ref_vy = #V_Y
 
-M98 P900    ; correct the reference x, y, z position
+IF [#reference_corrected == 0] THEN
+    M98 P900          ; correct the reference x, y, z position
+ENDIF
 
 
 ; Step 2: Move towards reference x, y position
@@ -84,19 +90,39 @@ M07 I1             ; check if the suction is successful, assume I1 is the sensor
 M98 P901
 
 
+; Step 6: Move to the drop position x, y
+#drop_x = 200
+#drop_y = 100
+#drop_z = -520
 
+#drop_corrected = 0 ; set #drop_corrected = 0 after setting the dropping position
 
+IF [#drop_corrected == 0] THEN
+    M98 P905          ; correct the drop x, y, z position
+ENDIF
 
+G01 X[#drop_x] Y[#drop_y] Z[#z_max] F200 ; move to the drop position x, y
 
 
 
 ;================================================
-; O900: offset_correction()
+; O900: offset_correction(): correct the reference x, y, z position
 ;================================================
 O900
 #ref_x = #ref_x + #offset_x
 #ref_y = #ref_y + #offset_y
 #ref_z = #ref_z + #offset_z
+#reference_corrected = 1
+M99
+
+;================================================
+; O905: offset_correction(): correct the drop x, y, z position
+;================================================
+O905
+#drop_x = #drop_x + #offset_x
+#drop_y = #drop_y + #offset_y
+#drop_z = #drop_z + #offset_z
+#drop_corrected = 1
 M99
 
 
