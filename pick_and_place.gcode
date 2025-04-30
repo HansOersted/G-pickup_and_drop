@@ -105,6 +105,20 @@ G01 X[#drop_x] Y[#drop_y] Z[#z_max] F200 ; move to the drop position x, y
 
 
 
+; Step 7: Getting down to the drop position
+G01 X[#drop_x] Y[#drop_y] Z[#drop_z] F200 ; move to the drop position z
+
+
+; Step 8: Release the object and reset the robot
+M05 D10            ; stop sucking, assume D10 is the suction command
+G04 P0.5           ; Release the object for 0.5s
+M07 I0             ; check if the release is successful, assume I0 is the sensor signal, use #I0 to check the release status
+
+M98 P901          ; move to top
+#task_begin = 0   ; wait for the next task
+
+
+
 ;================================================
 ; O900: offset_correction(): correct the reference x, y, z position
 ;================================================
