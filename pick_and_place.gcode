@@ -74,8 +74,6 @@ IF [#tracking_successful == 1] THEN GOTO 100
 G01 F[#v_cmd_mag]
 G01 X[#x_target] Y[#y_target] Z[#z_max]
 
-G04 P#dt_control         ; wait one control period
-
 ; loop if tracking not successful
 IF [[#tracking_successful == 0] AND [#task_begin == 1]] THEN GOTO 20
 
