@@ -14,7 +14,7 @@ IF [#task_begin == 0] THEN
     #task_begin = 1   ; set task begin flag
 ENDIF
 
-
+N20
 ; Step 1: Obtain object's position + velocity + transfer to reference
 #O0_X = 100      ; past real-time position (simulated input)
 #O0_Y = -50
@@ -47,6 +47,9 @@ ENDIF
 
 M98 P910     ; check_tracking_successful()
 
+; Jump to Step 3 if tracking successful
+IF [#tracking_successful == 1] THEN GOTO 100
+
 ; Kp: coefficient of proportional control
 #Kp = 1.0
 
@@ -70,6 +73,9 @@ M98 P910     ; check_tracking_successful()
 #v_cmd_mag = #v_cmd_coefficient * #sqrt[#v_cmd_x * #v_cmd_x + #v_cmd_y * #v_cmd_y]
 G01 F[#v_cmd_mag]
 G01 X[#x_target] Y[#y_target] Z[#z_max]
+
+; loop if tracking not successful
+IF [[#tracking_successful == 0] AND [#task_begin == 1]] THEN GOTO 20
 
 
 
