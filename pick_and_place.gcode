@@ -112,7 +112,7 @@ G01 X[#drop_x] Y[#drop_y] Z[#z_max] F200 ; move to the drop position x, y
 
 
 
-; Step 7: Getting down to the drop position
+; Step 7: Get down to the drop position
 G01 X[#drop_x] Y[#drop_y] Z[#drop_z] F200 ; move to the drop position z
 
 
