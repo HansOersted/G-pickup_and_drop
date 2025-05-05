@@ -1,13 +1,17 @@
 #task_begin = 0
-#z_max = -300      ; maximum z position
+#tracking_successful = 0
+#reference_corrected = 0
+#drop_corrected = 0
 
+#Kp = 1.0 ; Kp: coefficient of proportional control
+#dt_control = 0.05 ; sampling time
 
+#z_max = -300 ; maximum z position for the robot to move to the top position
+
+; object position --> robot position
 #offset_x = 0
 #offset_y = 0
-#offset_z = -20
-
-#reference_offset_corrected = 0
-#drop_offset_corrected = 0
+#offset_z = 0.1
 
 IF [#task_begin == 0] THEN
     M98 P901          ; move to top
@@ -25,7 +29,7 @@ N20
 #V_X = -0.1        ; past real-time velocity (simulated input)
 #V_Y = 0.3
 
-#delay = 0.2        ; processing time (image captured --> controller knows --> control signal received)
+#delay = 0.01        ; processing time (image captured --> controller knows --> current time)
 
 ; real-time position
 #ref_x = #O0_X + #V_X * #delay
@@ -50,9 +54,6 @@ M98 P910     ; check_tracking_successful()
 ; Jump to Step 3 if tracking successful
 IF [#tracking_successful == 1] THEN GOTO 100
 
-; Kp: coefficient of proportional control
-#Kp = 1.0
-
 ; reference velocity
 #v_ref_x = #ref_vx
 #v_ref_y = #ref_vy
@@ -60,9 +61,6 @@ IF [#tracking_successful == 1] THEN GOTO 100
 ; PD control --> velocity command
 #v_cmd_x = #v_ref_x + #Kp * #e_x
 #v_cmd_y = #v_ref_y + #Kp * #e_y
-
-; sampling time
-#dt_control = 0.05
 
 ; velocity command --> position command
 #x_target = #X + #v_cmd_x * #dt_control
@@ -75,13 +73,16 @@ G01 F[#v_cmd_mag]
 G01 X[#x_target] Y[#y_target] Z[#z_max]
 
 ; loop if tracking not successful
-IF [[#tracking_successful == 0] AND [#task_begin == 1]] THEN GOTO 20
+IF [#task_begin == 1] THEN GOTO 20
 
 
 
 N100
 ; Step 3: getting down to the object, assume that the time getting down is negligible for reference velocity x, y
-G01 X[#x_target] Y[#y_target] Z[#ref_z] F200 ; move to the reference z position
+IF [#reference_corrected == 0] THEN
+    M98 P900          ; correct the reference x, y, z position
+ENDIF
+G01 Z[#ref_z] F200
 
 
 
@@ -121,7 +122,7 @@ G04 P0.5           ; Release the object for 0.5s
 M07 I0             ; check if the release is successful, assume I0 is the sensor signal, use #I0 to check the release status
 
 M98 P901          ; move to top
-#task_begin = 0   ; wait for the next task
+#task_begin = 0   ; wait for the next task, task completed
 
 
 
