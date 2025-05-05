@@ -1,4 +1,4 @@
-# P controller for picking up and drop.  
+# P controller for picking up and dropping.  
 
 This repo gives the G-code to pick up the object and move to the desired position before dropping.  
 
