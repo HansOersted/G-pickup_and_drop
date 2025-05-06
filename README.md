@@ -13,4 +13,9 @@ What makes this code interesting is that this code is programmed to
 **Step 5.** Pick the object to the top position.  
 **Step 6.** Move the object to the drop position (x, y) while maintaining at the highest altitude.  
 **Step 7.** Get down to the drop point (x, y, z).  
-**Step 8.** Release the object and reset the robot.
+**Step 8.** Release the object and reset the robot.  
+
+Note:  
+1. Updated the units before using.
+2. Align the parameters for the specific use.
+3. The sample time and P coefficient are tunable.
